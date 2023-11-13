@@ -123,16 +123,25 @@ void MainWindow::on_action_open_triggered()
 
 void MainWindow::on_action_save_triggered()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"), QDir::homePath(), tr("База данных (*.db)"));
     model -> submit();
+    QString currentDir = QDir::currentPath();
+    QString fileName = currentDir + "/DB.db";
     QFile::copy(db.databaseName(), fileName);
-    qDebug("saved db\n");
+    qDebug("Saved in prev dir\n");
 }
 
+void MainWindow::on_action_saveAs_triggered()
+{
+    model -> submit();
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"), QDir::homePath(), tr("База данных (*.db)"));
+    QFile::copy(db.databaseName(), fileName);
+    qDebug("saved in new dir\n");
+}
 
 void MainWindow::on_action_about_triggered()
 {
     QMessageBox::question(this, tr("Информация"), tr("Курсовая работа ИКПИ-22"),
     QMessageBox::Ok, QMessageBox::Cancel);
 }
+
 

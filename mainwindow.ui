@@ -49,6 +49,7 @@
     <addaction name="action_newFile"/>
     <addaction name="action_merge"/>
     <addaction name="action_save"/>
+    <addaction name="action_saveAs"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -163,6 +164,15 @@
    </property>
    <property name="text">
     <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="action_saveAs">
+   <property name="icon">
+    <iconset resource="Resources/Resources.qrc">
+     <normaloff>:/R (3).png</normaloff>:/R (3).png</iconset>
+   </property>
+   <property name="text">
+    <string>Сохранить как</string>
    </property>
   </action>
  </widget>

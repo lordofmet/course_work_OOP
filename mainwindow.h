@@ -39,12 +39,13 @@ private slots:
 
     void on_action_about_triggered();
 
+    void on_action_saveAs_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
     QSqlQuery *query;
     QSqlTableModel *model;
-    QString filePath = "./DB.db";
 
     int row;
 };
