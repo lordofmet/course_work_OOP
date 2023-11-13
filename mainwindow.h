@@ -31,17 +31,20 @@ private slots:
 
     void on_tableView_clicked(const QModelIndex &index);
 
-    void on_action_triggered();
+    void checkSave();
 
-    //void on_action_open_triggered();
+    void on_action_open_triggered();
 
-    //void checkSaveDB();
+    void on_action_save_triggered();
+
+    void on_action_about_triggered();
 
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
     QSqlQuery *query;
     QSqlTableModel *model;
+    QString filePath = "./DB.db";
 
     int row;
 };

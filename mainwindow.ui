@@ -48,7 +48,7 @@
     <addaction name="action_open"/>
     <addaction name="action_newFile"/>
     <addaction name="action_merge"/>
-    <addaction name="action"/>
+    <addaction name="action_save"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -84,7 +84,9 @@
    <addaction name="separator"/>
    <addaction name="separator"/>
    <addaction name="action_newFile"/>
-   <addaction name="action"/>
+   <addaction name="separator"/>
+   <addaction name="action_save"/>
+   <addaction name="separator"/>
    <addaction name="separator"/>
    <addaction name="separator"/>
    <addaction name="action_merge"/>
@@ -154,7 +156,7 @@
     <string>Открыть</string>
    </property>
   </action>
-  <action name="action">
+  <action name="action_save">
    <property name="icon">
     <iconset resource="Resources/Resources.qrc">
      <normaloff>:/R (3).png</normaloff>:/R (3).png</iconset>

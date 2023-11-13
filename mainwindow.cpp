@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     db = QSqlDatabase::addDatabase("QSQLITE");
+    //db = QSqlDatabase::addDatabase("QMYSQL");
     db.setDatabaseName("./DB.db");
     if (db.open()) {
         qDebug("succesfully opened db\n");
@@ -31,14 +32,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_action_newFile_triggered()
-{
+void MainWindow::checkSave() {
     bool needSave = false;
     int ret = QMessageBox::Discard;
 
     if (model -> isDirty()) {
         ret = QMessageBox::question(this, tr("Сохранить"), tr("Вы хотите сохранить БД?"),
-        QMessageBox::Save | QMessageBox::Save | QMessageBox::Cancel,
+        QMessageBox::Save | QMessageBox::Cancel,
         QMessageBox::Cancel);
 
         if (ret == QMessageBox::Save) {
@@ -53,6 +53,11 @@ void MainWindow::on_action_newFile_triggered()
         QFile::copy(db.databaseName(), fileName);
         qDebug("saved db\n");
     }
+}
+
+void MainWindow::on_action_newFile_triggered()
+{
+    checkSave();
 
     QString fileName = QFileDialog::getSaveFileName(this, tr("Создать новый файл"), QDir::homePath(), tr("База данных (*.db)"));
 
@@ -66,6 +71,7 @@ void MainWindow::on_action_newFile_triggered()
             qDebug("couldn't open db: creating new db\n");
             return;
         }
+        delete query;
         query = new QSqlQuery(db);
         query -> exec("DROP TABLE IF EXISTS SPBTheatres");
         query -> exec("CREATE TABLE SPBTheatres(Название TEXT, Адрес TEXT, Дата_основания TEXT, ХудРук TEXT);");
@@ -84,6 +90,7 @@ void MainWindow::on_action_add_triggered()
 void MainWindow::on_action_del_triggered()
 {
     model -> removeRow(row);
+    model -> select();
 }
 
 
@@ -92,9 +99,40 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
     row = index.row();
 }
 
-
-void MainWindow::on_action_triggered()
+void MainWindow::on_action_open_triggered()
 {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Открыть файл"), QDir::homePath(), tr("База данных (*.db)"));
+    if (!fileName.isEmpty()) {
+        checkSave();
+        db.close();
+        db.setDatabaseName(fileName);
+        if (db.open()) {
+            qDebug("reopened DB\n");
+        }
+        else {
+            qDebug("failed to reopen db\n");
+            return;
+        }
+        delete query;
+        query = new QSqlQuery(db);
+        model -> setTable("SPBTheatres");
+        model -> select();
+    }
 
+}
+
+void MainWindow::on_action_save_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"), QDir::homePath(), tr("База данных (*.db)"));
+    model -> submit();
+    QFile::copy(db.databaseName(), fileName);
+    qDebug("saved db\n");
+}
+
+
+void MainWindow::on_action_about_triggered()
+{
+    QMessageBox::question(this, tr("Информация"), tr("Курсовая работа ИКПИ-22"),
+    QMessageBox::Ok, QMessageBox::Cancel);
 }
 
