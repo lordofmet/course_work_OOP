@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     else {
         qDebug("couldn't open db");
     }
-
     query = new QSqlQuery(db);
     //query -> exec("DROP TABLE IF EXISTS SPBTheatres"); //DROP TABLE EVERY EXECUTION
     v.push_back("Название");
@@ -23,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     v.push_back("ХудРук");
     v.push_back("SPBTheatres");
     auto it = v.begin();
-    QString new_db = "CREATE TABLE " + *(it + 4) + " " + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, " + *(it + 3) + " TEXT);";
+    QString new_db = "CREATE TABLE " + *(it + 4) + " " + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, "
+                     + *(it + 3) + " TEXT);";
     qDebug() << new_db << "\n";
     query -> exec(new_db);
     //query->exec("CREATE TABLE SPBTheatres(" + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, " + *(it + 3) + " TEXT);");
@@ -57,7 +57,8 @@ void MainWindow::checkSave() {
     }
 
     if (needSave) {
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"), QDir::homePath(), tr("База данных (*.db)"));
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"),
+                           QDir::homePath(), tr("База данных (*.db)"));
         model -> submit();
         QFile::copy(db.databaseName(), fileName);
         qDebug("saved db\n");
@@ -147,7 +148,8 @@ void MainWindow::on_action_saveAs_triggered()
 {
     statusBar()->showMessage("Выполняется сохранение...");
     model -> submit();
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"), QDir::homePath(), tr("База данных (*.db)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить файл базы данных"),
+                       QDir::homePath(), tr("База данных (*.db)"));
     if (!fileName.isEmpty()) {
         QFile::copy(db.databaseName(), fileName);
         qDebug("saved in new dir\n");
@@ -159,7 +161,7 @@ void MainWindow::on_action_saveAs_triggered()
 void MainWindow::on_action_about_triggered()
 {
     statusBar()->showMessage("Выполняется показ информации о проекте...");
-    QMessageBox::question(this, tr("Информация"), tr("Курсовая работа ИКПИ-22"),
+    QMessageBox::question(this, tr("Информация"), tr("Курсовая работа ИКПИ-22 по дисциплине ООП"),
     QMessageBox::Ok, QMessageBox::Cancel);
     statusBar()->showMessage("");
 }
@@ -167,7 +169,8 @@ void MainWindow::on_action_about_triggered()
 void MainWindow::on_action_merge_triggered()
 {
     statusBar()->showMessage("Выполняется сляние...");
-    QString secondDbFile = QFileDialog::getOpenFileName(this, tr("Выберите базу данных для слияния"), QDir::homePath(), tr("База данных(*.db)"));
+    QString secondDbFile = QFileDialog::getOpenFileName(this, tr("Выберите базу данных для слияния"),
+                           QDir::homePath(), tr("База данных(*.db)"));
     if (!secondDbFile.isEmpty()) {
         QSqlDatabase secondDb = QSqlDatabase::addDatabase("QSQLITE", "second_connection");
         secondDb.setDatabaseName(secondDbFile);

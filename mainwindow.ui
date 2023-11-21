@@ -76,8 +76,23 @@
     </rect>
    </property>
    <widget class="QMenu" name="menu">
+    <property name="toolTip">
+     <string>Открытие, сохранение и слияние файлов</string>
+    </property>
+    <property name="toolTipDuration">
+     <number>5000</number>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
     <property name="title">
      <string>Файл</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
     </property>
     <addaction name="action_open"/>
     <addaction name="action_newFile"/>
@@ -86,6 +101,9 @@
     <addaction name="action_saveAs"/>
    </widget>
    <widget class="QMenu" name="menu_2">
+    <property name="toolTip">
+     <string>Удаление и добавление полей</string>
+    </property>
     <property name="title">
      <string>Запись</string>
     </property>
@@ -93,6 +111,9 @@
     <addaction name="action_del"/>
    </widget>
    <widget class="QMenu" name="menu_3">
+    <property name="toolTip">
+     <string>О проекте</string>
+    </property>
     <property name="title">
      <string>Помощь</string>
     </property>
@@ -145,6 +166,9 @@
    <property name="text">
     <string>ABOUT</string>
    </property>
+   <property name="toolTip">
+    <string>Информация о проекте</string>
+   </property>
   </action>
   <action name="action_add">
    <property name="icon">
@@ -153,6 +177,9 @@
    </property>
    <property name="text">
     <string>Добавить поле</string>
+   </property>
+   <property name="toolTip">
+    <string>Добавить поле в БД</string>
    </property>
   </action>
   <action name="action_del">
@@ -163,6 +190,9 @@
    <property name="text">
     <string>Удалить поле</string>
    </property>
+   <property name="toolTip">
+    <string>Удалить поле из БД</string>
+   </property>
   </action>
   <action name="action_newFile">
    <property name="icon">
@@ -171,6 +201,9 @@
    </property>
    <property name="text">
     <string>Создать</string>
+   </property>
+   <property name="toolTip">
+    <string>Создать новую БД</string>
    </property>
   </action>
   <action name="action_merge">
@@ -181,6 +214,9 @@
    <property name="text">
     <string>Объединить</string>
    </property>
+   <property name="toolTip">
+    <string>Объединить две БД: Слияние производится из выбранной БД в текущую открытую</string>
+   </property>
   </action>
   <action name="action_open">
    <property name="icon">
@@ -189,6 +225,9 @@
    </property>
    <property name="text">
     <string>Открыть</string>
+   </property>
+   <property name="toolTip">
+    <string>Открыть файл БД</string>
    </property>
   </action>
   <action name="action_save">
@@ -199,6 +238,9 @@
    <property name="text">
     <string>Сохранить</string>
    </property>
+   <property name="toolTip">
+    <string>Сохранить (в старой директории)</string>
+   </property>
   </action>
   <action name="action_saveAs">
    <property name="icon">
@@ -207,6 +249,9 @@
    </property>
    <property name="text">
     <string>Сохранить как</string>
+   </property>
+   <property name="toolTip">
+    <string>Сохранить как (выбор директории)</string>
    </property>
   </action>
  </widget>

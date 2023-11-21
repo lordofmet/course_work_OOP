@@ -13,6 +13,7 @@
 #include <QSqlRecord>
 #include <QChar>
 #include <QModelIndex>
+#include <QIcon>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
