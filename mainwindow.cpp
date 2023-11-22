@@ -20,12 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
     //query -> exec("DROP TABLE IF EXISTS SPBTheatres"); //DROP TABLE EVERY EXECUTION
     //arr<QString> v(0, 10);
     v.add("Название");
-    v.add("Название");
     v.add("Адрес");
     v.add("Дата_основания");
+    v.add("ХудРук");
     v.add("SPBTheatres");
     auto it = v.begin();
-    QString new_db = "CREATE TABLE " + *(it + 4) + " " + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, "
+    QString new_db = "CREATE TABLE " + *(it + 4) + "(" + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, "
                      + *(it + 3) + " TEXT);";
     qDebug() << new_db << "\n";
     query -> exec(new_db);
