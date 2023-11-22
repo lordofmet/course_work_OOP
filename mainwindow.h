@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "my_vector.h"
+//#include "my_vector.hpp"
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <QDebug>
@@ -61,9 +63,8 @@ private:
     QSqlDatabase db;
     QSqlQuery *query;
     QSqlTableModel *model;
-    QVector<QString> v;
     QString search_query;
-
+    arr<QString> v;
 
     int row;
     int tmp = 0;

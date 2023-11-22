@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "my_vector.h"
+#include "my_vector.hpp"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -16,11 +18,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
     query = new QSqlQuery(db);
     //query -> exec("DROP TABLE IF EXISTS SPBTheatres"); //DROP TABLE EVERY EXECUTION
-    v.push_back("Название");
-    v.push_back("Адрес");
-    v.push_back("Дата_основания");
-    v.push_back("ХудРук");
-    v.push_back("SPBTheatres");
+    //arr<QString> v(0, 10);
+    v.add("Название");
+    v.add("Название");
+    v.add("Адрес");
+    v.add("Дата_основания");
+    v.add("SPBTheatres");
     auto it = v.begin();
     QString new_db = "CREATE TABLE " + *(it + 4) + " " + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, "
                      + *(it + 3) + " TEXT);";
@@ -141,7 +144,7 @@ void MainWindow::on_action_save_triggered()
     QString fileName = currentDir;
     QFile::copy(db.databaseName(), fileName);
     qDebug("Saved in prev dir\n");
-    statusBar()->showMessage("");
+    statusBar()->showMessage("БД была сохранена");
 }
 
 void MainWindow::on_action_saveAs_triggered()
@@ -155,7 +158,7 @@ void MainWindow::on_action_saveAs_triggered()
         qDebug("saved in new dir\n");
     }
     qDebug("empty file\n");
-    statusBar()->showMessage("");
+    statusBar()->showMessage("БД была сохранена");
 }
 
 void MainWindow::on_action_about_triggered()
