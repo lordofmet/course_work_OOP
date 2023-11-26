@@ -1,8 +1,6 @@
+#pragma once
 #ifndef MY_VECTOR_H
 #define MY_VECTOR_H
-#endif // MY_VECTOR_H
-
-#pragma once
 
 #include <cmath>
 #include <iostream>
@@ -17,8 +15,6 @@ class arr {
     T* a;
 public:
     arr();
-
-    arr(int _minInd, int _maxInd);
 
     arr(const arr& ar);
 
@@ -38,5 +34,11 @@ public:
 
     T* begin();
 
+    T* end();
+
+    T& operator[] (int ind);
+
     ~arr();
 };
+
+#endif // MY_VECTOR_H

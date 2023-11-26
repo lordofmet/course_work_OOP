@@ -1,14 +1,9 @@
-/*#ifndef MY_VECTOR_HPP
-#define MY_VECTOR_HPP
-
-#endif // MY_VECTOR_HPP
-
 #include "my_vector.h"
 
 template <typename T>
 arr<T>::arr() {
     minInd = 0;
-    maxInd = 100;
+    maxInd = 500000;
     size = maxInd - minInd + 1;
     a = new T[size];
     cur = 0;
@@ -22,15 +17,6 @@ arr<T>::arr(const arr& ar) {
     a = new T[size];
     for (int i = 0; i < size; i++) a[i] = ar.a[i];
     cur = ar.cur;
-}
-
-template <typename T>
-arr<T>::arr(int _minInd, int _maxInd) {
-    minInd = _minInd;
-    maxInd = _maxInd;
-    size = maxInd - minInd + 1; //уже нельзя расширить
-    a = new T[size];
-    cur = 0;
 }
 
 template <typename T>
@@ -109,6 +95,13 @@ T* arr<T>::begin() {
 }
 
 template <typename T>
+T* arr<T>::end() {
+    if (cur)
+        return a + 1;
+    return nullptr;
+}
+
+template <typename T>
 void arr<T>::add(T val) {
     if (cur == maxInd - minInd + 1) {
         cout << "Cant add more\n";
@@ -136,4 +129,15 @@ template <typename T>
 arr<T>::~arr() {
     delete[] a;
 }
-*/
+
+template <typename T>
+T& arr<T>::operator [](int ind) {
+    try {
+        if (ind >= cur) throw "memory OF";
+        return a[ind];
+    }
+    catch (const char *e) {
+        cout << e << "\n";
+    }
+    return a[cur];
+}

@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "my_vector.h"
-#include "my_vector.hpp"
+#include "my_vector.cpp"
+#include "theatre.h"
+#include "theatre.cpp"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -17,20 +19,18 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug("couldn't open db");
     }
     query = new QSqlQuery(db);
-    //query -> exec("DROP TABLE IF EXISTS SPBTheatres"); //DROP TABLE EVERY EXECUTION
-    //arr<QString> v(0, 10);
-    v.add("Название");
-    v.add("Адрес");
-    v.add("Дата_основания");
-    v.add("ХудРук");
-    v.add("SPBTheatres");
+    QString n = "Название", a = "Адрес", d = "Дата_основания", h = "ХудРук", dbName = "SPBTheatres";
+    theatre new_t(n, a, d, h);
+    v.add(new_t.name);
+    v.add(new_t.adress);
+    v.add(new_t.date);
+    v.add(new_t.head);
+    v.add(dbName);
     auto it = v.begin();
     QString new_db = "CREATE TABLE " + *(it + 4) + "(" + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, "
                      + *(it + 3) + " TEXT);";
     qDebug() << new_db << "\n";
     query -> exec(new_db);
-    //query->exec("CREATE TABLE SPBTheatres(" + *it + " TEXT, " + *(it + 1) + " TEXT, " + *(it + 2) + " TEXT, " + *(it + 3) + " TEXT);");
-    //query -> exec("CREATE TABLE SPBTheatres(Название TEXT, Адрес TEXT, Дата_основания TEXT, ХудРук TEXT);");
 
     model = new QSqlTableModel(this, db);
     model -> setTable("SPBTheatres");
@@ -92,25 +92,7 @@ void MainWindow::on_action_newFile_triggered()
         model -> setTable("SPBTheatres");
         model -> select();
     }
-    statusBar()->showMessage("");
-}
-
-void MainWindow::on_action_add_triggered()
-{
-    model -> insertRow(model -> rowCount());
-}
-
-
-void MainWindow::on_action_del_triggered()
-{
-    model -> removeRow(row);
-    model -> select();
-}
-
-
-void MainWindow::on_tableView_clicked(const QModelIndex &index)
-{
-    row = index.row();
+    statusBar()->showMessage("Создан новый файл");
 }
 
 void MainWindow::on_action_open_triggered()
@@ -133,7 +115,7 @@ void MainWindow::on_action_open_triggered()
         model -> setTable("SPBTheatres");
         model -> select();
     }
-    statusBar()->showMessage("");
+    statusBar()->showMessage("Открыта БД");
 }
 
 void MainWindow::on_action_save_triggered()
@@ -166,7 +148,7 @@ void MainWindow::on_action_about_triggered()
     statusBar()->showMessage("Выполняется показ информации о проекте...");
     QMessageBox::question(this, tr("Информация"), tr("Курсовая работа ИКПИ-22 по дисциплине ООП"),
     QMessageBox::Ok, QMessageBox::Cancel);
-    statusBar()->showMessage("");
+    statusBar()->showMessage("Был выполнен показ данных о файле");
 }
 
 void MainWindow::on_action_merge_triggered()
@@ -203,7 +185,15 @@ void MainWindow::on_action_merge_triggered()
     else {
         qDebug("unable to choose db for merge\n");
     }
-    statusBar()->showMessage("");
+    statusBar()->showMessage("Было выполнено слияние БД");
+}
+
+void MainWindow::on_action_del_triggered()
+{
+    model -> removeRow(row);
+    model -> select();
+    v1[row].name = "";
+    statusBar()->showMessage("Удалена запись");
 }
 
 bool MainWindow::theatreExists(const QString &theatreName) {
@@ -240,12 +230,140 @@ void MainWindow::on_lineEdit_textEdited(const QString &arg1)
         model -> setFilter(filter);
         model -> select();
         ui -> tableView -> setModel(model);
+        statusBar()->showMessage("Завершен поиск данных по поиску");
     }
-    statusBar()->showMessage("");
+    else
+        statusBar()->showMessage("Показ данных по поиску");
 }
 
 void MainWindow::on_searchButton_clicked()
 {
     MainWindow::search(search_query);
+}
+
+void MainWindow::on_tableView_clicked(const QModelIndex &index)
+{
+    row = index.row();
+    col = index.column();
+    qDebug() << "new rol = " << col << "\n";
+}
+
+void MainWindow::on_action_sortAlph_triggered()
+{
+    model->setSort(col, Qt::AscendingOrder);
+    model -> select();
+    model->sort(col, Qt::AscendingOrder);
+    model ->submitAll();
+    model -> select();
+    ui -> tableView -> setModel(model);
+    statusBar()->showMessage("Отсортировано в алфавитном порядке");
+}
+
+
+void MainWindow::on_action_sortRevAlph_triggered()
+{
+    model->setSort(col, Qt::DescendingOrder);
+    model -> select();
+    model->sort(col, Qt::DescendingOrder);
+    model ->submitAll();
+    model -> select();
+    ui -> tableView -> setModel(model);
+    statusBar()->showMessage("Отсортировано в обратном алфавитном порядке");
+}
+
+void MainWindow::on_action_add_triggered()
+{
+    QDialog dialog;
+    QGridLayout layout(&dialog);
+    QLineEdit nameIn, adressIn, dateIn, directorIn;
+    QLabel name("Название:"), adress("Адрес:"), date("Дата_основания:"), director("ХудРук:");
+
+    layout.addWidget(&name, 0, 0);
+    layout.addWidget(&nameIn, 0, 1);
+    layout.addWidget(&adress, 1, 0);
+    layout.addWidget(&adressIn, 1, 1);
+    layout.addWidget(&date, 2, 0);
+    layout.addWidget(&dateIn, 2, 1);
+    layout.addWidget(&director, 3, 0);
+    layout.addWidget(&directorIn, 3, 1);
+
+    QPushButton add("Изменить");
+    layout.addWidget(&add, 4, 0, 1, 2);
+
+    connect(&add, &QPushButton::clicked, [&]() {
+        QString tName, tAdress, tDate, tDirector;
+        tName = nameIn.text();
+        tAdress = adressIn.text();
+        tDate = dateIn.text();
+        tDirector = directorIn.text();
+
+        int newRow = model -> rowCount();
+        model ->insertRow(newRow);
+        model->setData(model->index(newRow, 0), tName);
+        model->setData(model->index(newRow, 1), tAdress);
+        model->setData(model->index(newRow, 2), tDate);
+        model->setData(model->index(newRow, 3), tDirector);
+
+        theatre tmp(tName, tAdress, tDate, tDirector);
+        v1.add(tmp);
+        qDebug() << v1[v1.get_size() - 1].name << "\n";
+
+        dialog.close();
+    });
+
+    dialog.exec();
+    statusBar()->showMessage("Добавлена запись");
+}
+
+void MainWindow::on_action_changeRec_triggered()
+{
+    QDialog dialog;
+    QFormLayout form(&dialog);
+    QLineEdit nameEdit, addressEdit, dateEdit, directorEdit;
+
+    int selectedRow = ui->tableView->selectionModel()->currentIndex().row();
+
+    QSqlRecord record = model->record(selectedRow);
+
+    QString sn, sa, sd, sdir;
+    nameEdit.setText(record.value("Название").toString());
+    addressEdit.setText(record.value("Адрес").toString());
+    dateEdit.setText(record.value("Дата_основания").toString());
+    directorEdit.setText(record.value("ХудРук").toString());
+
+    form.addRow("Название:", &nameEdit);
+    form.addRow("Адрес:", &addressEdit);
+    form.addRow("Дата основания:", &dateEdit);
+    form.addRow("Худрук:", &directorEdit);
+
+    QPushButton okButton("Изменить");
+    form.addRow(&okButton);
+
+    sn = nameEdit.text();
+    sa = addressEdit.text();
+    sd = dateEdit.text();
+    sdir = directorEdit.text();
+
+    for (auto it : v1) {
+        if (it.name == sn || it.adress == sa || it.date == sd || it.head == sdir) {
+            it.name = sn;
+            it.adress = sa;
+            it.date = sd;
+            it.head = sdir;
+        }
+    }
+
+    connect(&okButton, &QPushButton::clicked, [&]() {
+        model->setData(model->index(selectedRow, 0), nameEdit.text());
+        model->setData(model->index(selectedRow, 1), addressEdit.text());
+        model->setData(model->index(selectedRow, 2), dateEdit.text());
+        model->setData(model->index(selectedRow, 3), directorEdit.text());
+        model->submitAll();
+        dialog.close();
+    });
+
+    dialog.exec();
+
+    statusBar()->showMessage("Изменена запись");
 }
 

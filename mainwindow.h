@@ -2,12 +2,14 @@
 #define MAINWINDOW_H
 
 #include "my_vector.h"
-//#include "my_vector.hpp"
+#include "theatre.h"
+#include <QGridLayout>
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <QDebug>
 #include <QVector>
 #include <QSqlQuery>
+#include <QFormLayout>
 #include <QSqlTableModel>
 #include <QString>
 #include <QFileDialog>
@@ -58,6 +60,12 @@ private slots:
 
     void on_searchButton_clicked();
 
+    void on_action_sortAlph_triggered();
+
+    void on_action_sortRevAlph_triggered();
+
+    void on_action_changeRec_triggered();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
@@ -65,8 +73,10 @@ private:
     QSqlTableModel *model;
     QString search_query;
     arr<QString> v;
+    arr<theatre> v1;
 
-    int row;
+    int row, col;
     int tmp = 0;
 };
+
 #endif // MAINWINDOW_H

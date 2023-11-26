@@ -11,11 +11,13 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    my_vector.cpp \
+    theatre.cpp
 
 HEADERS += \
     mainwindow.h \
     my_vector.h \
-    my_vector.hpp
+    theatre.h \
 
 FORMS += \
     mainwindow.ui
